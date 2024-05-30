@@ -2,3 +2,51 @@
 Fuzz,3,Idaho
 Ghost,6,Tacoma
 Dream,2,Seattle
+
+
+# process_security_incidents.py
+
+import csv
+
+def read_csv(file_path):
+    """Read the CSV file and return the data as a list of lists."""
+    with open(file_path, mode='r', newline='') as file:
+        reader = csv.reader(file)
+        data = [row for row in reader]
+    return data
+
+def add_status_column(data):
+    """Add a new column named 'Status' with a default value of 'Pending'."""
+    if not data:
+        return data
+
+    # Add 'Status' column to the header
+    header = data[0]
+    header.append('Status')
+
+    # Add 'Pending' to each row
+    for row in data[1:]:
+        row.append('Pending')
+    
+    return data
+
+def write_csv(file_path, data):
+    """Write the data to a CSV file."""
+    with open(file_path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(data)
+
+if __name__ == "__main__":
+    input_file = 'security_incidents.csv'
+    output_file = 'security_incidents_modified.csv'
+
+    # Read the data from the input CSV file
+    data = read_csv(input_file)
+    
+    # Add the 'Status' column with 'Pending' value
+    modified_data = add_status_column(data)
+    
+    # Write the modified data to the output CSV file
+    write_csv(output_file, modified_data)
+    
+    print(f"Modified data has been written to {output_file}")
